@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing with JavaScript</title>
+</head>
+<body>
+    <h1>Image Processing with JavaScript</h1>
+
+    <input type="file" id="imageInput" accept="image/*">
+    <canvas id="outputCanvas" width="400" height="300" style="border:1px solid #000;"></canvas>
+
+    <script>
+        // Function to handle image processing
+        function processImage() {
+            // Get the input image element
+            var inputImage = document.getElementById('imageInput');
+
+            // Get the canvas and its 2D context
+            var canvas = document.getElementById('outputCanvas');
+            var ctx = canvas.getContext('2d');
+
+            // Create a new image element
+            var img = new Image();
+
+            // Set the source of the image to the selected file
+            img.src = URL.createObjectURL(inputImage.files[0]);
+
+            // Once the image is loaded, perform processing
+            img.onload = function () {
+                // Draw the original image on the canvas
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Example: Grayscale filter
+                grayscaleFilter(ctx);
+
+                // Example: Invert colors
+                invertColors(ctx);
+            };
+        }
+
+        // Function to apply a grayscale filter to the image
+        function grayscaleFilter(ctx) {
+            var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+            var data = imageData.data;
+
+            for (var i = 0; i < data.length; i += 4) {
+                var average = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                data[i] = data[i + 1] = data[i + 2] = average;
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // Function to invert colors in the image
+        function invertColors(ctx) {
+            var imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+            var data = imageData.data;
+
+            for (var i = 0; i < data.length; i += 4) {
+                data[i] = 255 - data[i];
+                data[i + 1] = 255 - data[i];
+                data[i + 2] = 255 - data[i];
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        // Add an event listener to the file input
+        document.getElementById('imageInput').addEventListener('change', processImage);
+    </script>
+</body>
+</html>
