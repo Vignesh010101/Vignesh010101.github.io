@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="3_Wordle_Game_style.css">
+    <title>Wordle Game</title>
+</head>
+<body>
+<div><center><h1>Simple Wordle Game By Vignesh</h1></center></div>
+    <div class="wordle-container">
+        <div id="word-display"></div>
+        <div id="input-container">
+            <input type="text" id="guess-input" maxlength="10" autocomplete="off">
+            <button onclick="checkGuess()">Guess</button>
+        </div>
+        <div id="keypad-container">
+            <!-- You can generate the keypad dynamically using JavaScript -->
+            <button onclick="appendToGuess('A')">A</button>
+            <button onclick="appendToGuess('B')">B</button>
+            <button onclick="appendToGuess('C')">C</button>
+            <button onclick="appendToGuess('D')">D</button>
+            <button onclick="appendToGuess('E')">E</button>
+            <button onclick="appendToGuess('F')">F</button>
+            <button onclick="appendToGuess('G')">G</button>
+            <button onclick="appendToGuess('H')">H</button>
+            <button onclick="appendToGuess('I')">I</button>
+            <button onclick="appendToGuess('J')">J</button>
+            <button onclick="appendToGuess('K')">K</button>
+            <button onclick="appendToGuess('L')">L</button>
+            <button onclick="appendToGuess('M')">M</button>
+            <button onclick="appendToGuess('N')">N</button>
+            <button onclick="appendToGuess('O')">O</button>
+            <button onclick="appendToGuess('P')">P</button>
+            <button onclick="appendToGuess('Q')">Q</button>
+            <button onclick="appendToGuess('R')">R</button>
+            <button onclick="appendToGuess('S')">S</button>
+            <button onclick="appendToGuess('T')">T</button>
+            <button onclick="appendToGuess('U')">U</button>
+            <button onclick="appendToGuess('V')">V</button>
+            <button onclick="appendToGuess('W')">W</button>
+            <button onclick="appendToGuess('X')">X</button>
+            <button onclick="appendToGuess('Y')">Y</button>
+            <button onclick="appendToGuess('Z')">Z</button>
+<div id="language-buttons">
+    <h3>Switch Languages</h3>
+    <button class="button-85" role="button" onclick="switchLanguage('english')">English</button>
+    <button class="button-85" role="button" onclick="switchLanguage('spanish')">Spanish</button>
+</div>
+        </div>
+    </div>
+    
+    <script src="3_Wordle_Game_script.js"></script>
+</body>
+</html>
