@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Photo Album</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.js"></script>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</head>
+<body style="user-select: none;">
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <input type="file" id="inputImage" accept="image/*" onchange="loadImage('inputImage', 'outputImage')" />
+        <div class="mt-3">
+          <button onclick="checkColor()">Check Color</button>
+          <button onclick="makeReddish()">Make Reddish</button>
+          <button onclick="makeBlueish()">Make Blueish</button>
+          <button onclick="makeGreenish()">Make Greenish</button>
+          <button onclick="duplicateImage()">Duplicate Image</button>
+          <button onclick="increaseBrightness()">Increase Brightness</button>
+          <button onclick="reduceResolution()">Reduce Resolution</button>
+          <button onclick="createAvatar()">Create Avatar</button>
+          <button onclick="rgbToGray()">RGB to Grayscale</button>
+          <button onclick="generateQRCode()">Generate QR Code</button>
+          <select id="filter" onchange="filterImages()">
+            <option value="all">All Images</option>
+            <option value="reddish">Reddish</option>
+            <option value="blueish">Blueish</option>
+            <option value="greenish">Greenish</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <img id="outputImage" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+
+<script>
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+</script>
+
+  <script>
+    function loadImage(inputId, outputId) {
+      const input = document.getElementById(inputId);
+      const output = document.getElementById(outputId);
+
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          output.src = e.target.result;
+          applyCaman(output);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function applyCaman(output) {
+      Caman(output, function () {
+        // Default callback for CamanJS
+      });
+    }
+
+    function checkColor() {
+      Caman('#outputImage', function () {
+        this.process(function (pixels) {
+          let reddishPixels = 0;
+
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i] > pixels[i + 1] + pixels[i + 2]) {
+              reddishPixels++;
+            }
+          }
+
+          if (reddishPixels / (pixels.length / 4) > 0.5) {
+            console.log('Image is reddish');
+          } else {
+            console.log('Image is not reddish');
+          }
+        });
+
+        this.render();
+      });
+    }
+
+    function makeReddish() {
+      Caman('#outputImage', function () {
+        this.process(function (pixels) {
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i] <= pixels[i + 1] + pixels[i + 2]) {
+              pixels[i] = 255; // Set red channel to 255
+            }
+          }
+        });
+
+        this.render();
+      });
+    }
+
+    function makeBlueish() {
+      Caman('#outputImage', function () {
+        this.process(function (pixels) {
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i + 2] <= pixels[i] + pixels[i + 1]) {
+              pixels[i + 2] = 255; // Set blue channel to 255
+            }
+          }
+        });
+
+        this.render();
+      });
+    }
+
+    function makeGreenish() {
+      Caman('#outputImage', function () {
+        this.process(function (pixels) {
+          for (let i = 0; i < pixels.length; i += 4) {
+            if (pixels[i + 1] <= pixels[i] + pixels[i + 2]) {
+              pixels[i + 1] = 255; // Set green channel to 255
+            }
+          }
+        });
+
+        this.render();
+      });
+    }
+
+    function duplicateImage() {
+      Caman('#outputImage', function () {
+        this.clone();
+        this.render();
+      });
+    }
+
+    function increaseBrightness() {
+      Caman('#outputImage', function () {
+        this.brightness(20).render();
+      });
+    }
+
+    function reduceResolution() {
+      Caman('#outputImage', function () {
+        this.resize({
+          width: this.width / 2,
+          height: this.height / 2
+        }).render();
+      });
+    }
+
+    function createAvatar() {
+      Caman('#outputImage', function () {
+        this.crop(100, 100, 300, 300).render();
+      });
+    }
+
+    function rgbToGray() {
+      Caman('#outputImage', function () {
+        this.greyscale().render();
+      });
+    }
+
+    function generateQRCode() {
+      const outputImageSrc = document.getElementById('outputImage').src;
+      const qrcode = new QRCode(document.getElementById('qrcode'), {
+        text: outputImageSrc,
+        width: 128,
+        height: 128
+      });
+    }
+
+    function filterImages() {
+      // Implement the filter images operation
+    }
+  </script>
+
+</body>
+</html>
